@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="description" content="Operation Shadow AI and cybersecurity workshop portal">
+  <title>Operation Shadow | Workshop Portal</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
+  <header class="topbar">
+    <a class="brand" href="./"><span class="brand-mark">OS</span><span>OPERATION <b>SHADOW</b><small>AI × CYBERSECURITY WORKSHOP</small></span></a>
+    <div class="top-actions"><span id="connection-status" class="status-dot">Connecting</span><button id="signout-btn" class="btn btn-quiet hidden">Sign out</button></div>
+  </header>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow"><span class="pulse"></span> FIELD OPERATIONS / TRAINING PORTAL</div>
+      <h1>Think like an attacker.<br><span>Build like a defender.</span></h1>
+      <p class="hero-copy">Two rounds. Ten teams. Real-world AI and cybersecurity challenges. Submit your answers, document your demo, and track the leaderboard.</p>
+    </section>
+
+    <section id="auth-panel" class="panel auth-panel">
+      <div class="panel-heading"><div><p class="eyebrow">ACCESS CONTROL</p><h2>Enter the operations room</h2></div><span class="lock-icon">⌑</span></div>
+      <p class="muted">Use your workshop account. New accounts must be assigned to a team by an organizer before challenges unlock.</p>
+      <form id="auth-form" class="form-grid">
+        <label>Email address<input id="auth-email" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+        <label>Password<input id="auth-password" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters" required></label>
+        <div class="auth-actions"><button class="btn btn-primary" type="submit" id="signin-btn">Sign in <span>↗</span></button><button class="btn btn-outline" type="button" id="signup-btn">Create account</button></div>
+      </form>
+      <p id="auth-message" class="message" role="status"></p>
+    </section>
+
+    <section id="dashboard" class="hidden">
+      <div class="welcome-row"><div><p class="eyebrow">AUTHENTICATED SESSION</p><h2 id="welcome-title">Welcome, operator.</h2><p id="profile-subtitle" class="muted"></p></div><span id="role-pill" class="pill">PARTICIPANT</span></div>
+      <div id="assignment-notice" class="notice hidden"></div>
+      <div class="stat-grid">
+        <article class="stat-card"><span class="stat-label">ACTIVE ROUND</span><strong id="active-round">—</strong><small id="round-status">Awaiting organizer</small></article>
+        <article class="stat-card"><span class="stat-label">YOUR TEAM</span><strong id="team-name">Unassigned</strong><small>10 teams in the operation</small></article>
+        <article class="stat-card"><span class="stat-label">TOTAL SCORE</span><strong id="your-score">—</strong><small>Auto-scored answers + judge review</small></article>
+      </div>
+      <div class="content-grid">
+        <section class="panel"><div class="panel-heading"><div><p class="eyebrow">01 / KNOWLEDGE CHECK</p><h2>Round questions</h2></div><span class="section-number">01</span></div><p class="muted">Answer key matching is performed in the database. Correctness details are not stored in this page.</p><div id="questions-list" class="stack"><p class="muted">Loading questions…</p></div></section>
+        <section class="panel"><div class="panel-heading"><div><p class="eyebrow">02 / BUILD & SUBMIT</p><h2>Demo submission</h2></div><span class="section-number">02</span></div><p class="muted">Share what your team built and link a demo or repository if available.</p><form id="demo-form" class="stack"><label>Round<select id="demo-round" required></select></label><label>Solution summary<textarea id="demo-solution" rows="5" maxlength="10000" placeholder="What did you build? What problem does it solve? What did you test?" required></textarea></label><label>Demo URL (optional)<input id="demo-url" type="url" placeholder="https://..."></label><button class="btn btn-primary" type="submit">Submit demo <span>↗</span></button><p id="demo-message" class="message" role="status"></p></form><div class="submissions"><h3>Recent team submissions</h3><div id="submissions-list" class="stack"><p class="muted">No submissions loaded.</p></div></div></section>
+      </div>
+      <section class="panel leaderboard-panel"><div class="panel-heading"><div><p class="eyebrow">LIVE STANDINGS</p><h2>Team leaderboard</h2></div><button id="refresh-leaderboard" class="btn btn-outline btn-small">Refresh ↻</button></div><div id="leaderboard" class="leaderboard"><p class="muted">Loading standings…</p></div></section>
+      <section id="judge-panel" class="panel hidden"><div class="panel-heading"><div><p class="eyebrow">RESTRICTED / JUDGE ACCESS</p><h2>Evaluate demos</h2></div><span class="section-number">J</span></div><p class="muted">Score each team from 0–100 and leave actionable feedback.</p><form id="judge-form" class="form-grid"><label>Team<select id="judge-team" required></select></label><label>Round<select id="judge-round" required></select></label><label>Score (0–100)<input id="judge-score" type="number" min="0" max="100" step="0.5" required></label><label>Feedback<textarea id="judge-feedback" rows="3" maxlength="5000" placeholder="Strengths, gaps, and next steps"></textarea></label><button class="btn btn-primary" type="submit">Save evaluation</button><p id="judge-message" class="message" role="status"></p></form></section>
+    </section>
+    <footer><span>OPERATION SHADOW</span><span>AUTHORIZED WORKSHOP USE · KEEP ANSWER KEYS CONFIDENTIAL</span></footer>
+  </main>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
