@@ -66,6 +66,7 @@ The GitHub repository is public. Do not commit real challenge answer keys, parti
 - Automatic participant profile creation through a database trigger
 - Admin-only roster and team assignment controls
 - Active-round questions with RPC-based answer submission
+- Participant dashboards automatically sync round activation, switching, and closure every 5 seconds (and when a tab becomes visible), so participants do not need to refresh manually
 - Demo summary and optional URL submission
 - Team leaderboard
 - Judge scoring and feedback
