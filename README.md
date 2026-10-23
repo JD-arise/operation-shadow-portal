@@ -39,7 +39,7 @@ If you need to promote another trusted organizer, first create their Auth accoun
 ## Round operations
 1. Sign in with the existing admin account.
 2. In **Workshop results console → Round controls**, select a round and activate it when ready. This publishes the selected round's questions and closes any previously active round.
-3. Each activated round runs for 20 minutes. Participants can submit answers and demos only before its deadline; the backend enforces this even if a browser remains open. Admins can close a round early.
+3. Each activated round runs for 30 minutes. Participants can submit answers and demos only before its deadline; the backend enforces this even if a browser remains open. Admins can close a round early.
 4. Participants can resubmit their team's demo for the same round before time expires; the latest submission replaces the earlier one.
 5. To switch rounds, activate the next round from the admin console. Do not activate a round during preparation/testing unless you intend participants to see it.
 
