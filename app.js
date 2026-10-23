@@ -35,8 +35,12 @@ function renderCaseKit(active){
   const panel=$("case-study-kit");
   if(!panel)return;
   if(S.profile?.role!=="participant"){panel.classList.add("hidden");return;}
+  if(!active){
+    panel.classList.add("hidden");
+    return;
+  }
   panel.classList.remove("hidden");
-  const roundNo=active?.round_number||1, variants=CASE_DATA[roundNo]||CASE_DATA[1];
+  const roundNo=active.round_number, variants=CASE_DATA[roundNo]||CASE_DATA[1];
   const index=S.profile?.team_id?stableVariantIndex(S.profile.team_id,roundNo,variants.length):0;
   const kit=variants[index];
   $("case-kit-title").textContent=kit.title+" · "+kit.label;
@@ -46,7 +50,7 @@ function renderCaseKit(active){
   $("download-case-data").onclick=()=>{
     const csv=[kit.columns,...kit.rows].map(row=>row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");
     const url=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}));
-    const a=document.createElement("a");a.href=url;a.download="operation-shadow-round-"+roundNo+"-"+kit.label.toLowerCase().replace(/[^a-z0-9]+/g,"-")+".csv";a.click();URL.revokeObjectURL(url);
+    const a=document.createElement("a");a.href=url;a.download="operation-shadow-round-"+roundNo+"-"+kit.label.toLowerCase().replace(/[^a-z0-9]+/g,"-")+".csv";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
   };
 }
 async function loadDashboard(user){S.user=user;signed(true);$("profile-subtitle").textContent=user.email||"";const [p,t,r]=await Promise.all([supabase.from("profiles").select("id,display_name,role,team_id,email,created_at").eq("id",user.id).maybeSingle(),supabase.from("teams").select("id,name").order("name"),supabase.from("rounds").select("id,round_number,name,instructions,is_active,starts_at,ends_at").order("round_number")]);if(p.error){msg("auth-message",p.error.message,true);return;}S.profile=p.data;S.teams=t.data||[];S.rounds=r.data||[];if(S.profile?.role==="participant"&&!S.profile.team_id&&localStorage.getItem("os_pending_team_code")){const pending=localStorage.getItem("os_pending_team_code");localStorage.removeItem("os_pending_team_code");const joined=await supabase.rpc("join_team_with_code",{p_code:pending});if(joined.error){msg("auth-message","Account created, but team joining failed: "+joined.error.message+" You can enter the code below to retry.",true);}else{msg("auth-message","Joined "+(joined.data?.[0]?.joined_team_name||"your team")+".");return loadDashboard(user);}}if(!S.profile){msg("auth-message","Profile is being prepared; refresh shortly.",true);return;}$("welcome-title").textContent="Welcome, "+(S.profile.display_name||user.email)+".";$("role-pill").textContent=S.profile.role.toUpperCase();$("team-name").textContent=tn(S.profile.team_id);$("join-team-panel").classList.toggle("hidden",!!S.profile.team_id||S.profile.role!=="participant");const active=S.rounds.find(x=>x.is_active&&(!x.ends_at||new Date(x.ends_at).getTime()>Date.now()));renderedActiveId=active?.id||null;renderRoundClock(active);renderCaseKit(active);$("active-round").textContent=active?"ROUND "+active.round_number:"—";$("round-status").textContent=active?.name||"Awaiting organizer";$("assignment-notice").classList.toggle("hidden",!!S.profile.team_id||judge());$("assignment-notice").textContent="Enter the join code provided by your organizer to join your team.";const ro=S.rounds.map(x=>"<option value=\""+esc(x.id)+"\">"+esc(x.name)+"</option>").join("");$("judge-round").innerHTML=ro;$("demo-round").innerHTML=active?"<option value=\""+esc(active.id)+"\">"+esc(active.name)+"</option>":"<option value=\"\">No active round</option>";$("demo-round").disabled=!active;$("demo-form").querySelectorAll("input,textarea,button").forEach(x=>x.disabled=!active);$("judge-team").innerHTML=S.teams.map(x=>"<option value=\""+esc(x.id)+"\">"+esc(x.name)+"</option>").join("");$("judge-panel").classList.toggle("hidden",!judge());$("admin-panel").classList.toggle("hidden",!admin());await Promise.all([loadQuestions(),loadSubmissions(),loadLeaderboard()]);if(admin())await loadAdmin();}
