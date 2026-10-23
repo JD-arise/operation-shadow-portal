@@ -8,7 +8,7 @@ A static frontend for the two-round AI and cybersecurity workshop. Supabase prov
 - Two prepared simulated incident scenarios with five multiple-choice questions each; questions and keys are in Supabase, and keys are not shipped to the frontend
 - Admin-only round activation validates that every question has a key, publishes only the selected round, and closes the previous round
 - New signups automatically get a `public.profiles` record with participant role and no team assignment
-- Admin console: registered accounts, team assignment, all quiz answers and automatic scores, demo submissions, judge scores/feedback, team filter, and CSV export
+- Admin console: registered accounts, team assignment, participant/judge/admin role management, all quiz answers and automatic scores, demo submissions, judge scores/feedback, team filter, CSV export, and printable participant-kit download
 - The app uses the public publishable key only. Never put a Supabase secret/service-role key in browser code or GitHub.
 
 ## Sign-in and registration
