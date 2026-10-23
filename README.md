@@ -31,7 +31,7 @@ If you need to promote another trusted organizer, first create their Auth accoun
 
 ## Quiz content alignment
 - A review copy of the planned ANN/CNN and RNN/LSTM/Transformer quiz questions is in [`QUESTION_BANK_REVIEW.md`](./QUESTION_BANK_REVIEW.md). It intentionally contains no correct-answer mapping.
-- The live Supabase question bank has not yet been replaced. The database currently has an active Round 2 and existing answer submissions, so replacing questions in place would make those old submissions misleading. Before publishing the revised bank, confirm whether the existing submissions are disposable mock-test data; then update each question and its private answer key together while no participant round is active.
+- The Supabase question bank has been replaced with the ANN/CNN and RNN/LSTM/Transformer-aligned questions in one migration that also cleared mock quiz answers. Both rounds are currently inactive and all questions are unpublished until an admin starts a round. Verification confirmed 5 questions and 5 matching private answer keys per round, all worth 10 points; the private key table remains RLS-protected with no client policies or grants. The activation function checks for answer keys and starts a 30-minute round.
 
 ## Security review status
 - `private.question_keys`: Row Level Security is enabled, and direct table privileges are revoked from `public`, `anon`, and `authenticated`. There are no client-facing policies for this table. The scoring function accesses keys server-side.
