@@ -50,8 +50,16 @@ python -m http.server 8000
 ```
 Open `http://localhost:8000`.
 
-## Hosting
-The GitHub repository is public. Do not commit real challenge answer keys, participant data, passwords, or privileged credentials. The portal requires an appropriate static hosting setup; committing the code to GitHub does not by itself prove that a website is deployed or that deployment access is restricted.
+## Hosting with GitHub Pages
+A GitHub Actions deployment workflow is included at `.github/workflows/deploy-pages.yml`.
+
+1. Open the repository on GitHub → **Settings → Pages**.
+2. Under **Build and deployment**, choose **GitHub Actions** as the source.
+3. Open **Actions** and run **Deploy Operation Shadow portal to GitHub Pages**, or push a new commit to `main`.
+4. After the workflow succeeds, GitHub will show the published URL. For this repository, the expected Pages URL is `https://jd-arise.github.io/operation-shadow-portal/`, but do not share it as live until the deployment succeeds.
+5. In Supabase → **Authentication → URL Configuration**, add the actual published URL (and `http://localhost:8000/**` for local testing) to **Redirect URLs**. Set the Site URL to the production URL only after Pages is published; keep local and production redirect entries.
+
+The GitHub repository is public. Do not commit real challenge answer keys, participant data, passwords, or privileged credentials. The frontend contains only the public publishable key; keep all service-role keys and answer keys server-side.
 
 ## Features
 - Email/password sign-in and event-time account registration
