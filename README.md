@@ -29,6 +29,10 @@ The existing profile in this project is currently marked `admin`. Sign in with t
 
 If you need to promote another trusted organizer, first create their Auth account in Supabase Dashboard → Authentication → Users, then set that exact user's profile role to `admin` from the SQL Editor. Never expose privileged keys in frontend code.
 
+## Quiz content alignment
+- A review copy of the planned ANN/CNN and RNN/LSTM/Transformer quiz questions is in [`QUESTION_BANK_REVIEW.md`](./QUESTION_BANK_REVIEW.md). It intentionally contains no correct-answer mapping.
+- The live Supabase question bank has not yet been replaced. The database currently has an active Round 2 and existing answer submissions, so replacing questions in place would make those old submissions misleading. Before publishing the revised bank, confirm whether the existing submissions are disposable mock-test data; then update each question and its private answer key together while no participant round is active.
+
 ## Security review status
 - `private.question_keys`: Row Level Security is enabled, and direct table privileges are revoked from `public`, `anon`, and `authenticated`. There are no client-facing policies for this table. The scoring function accesses keys server-side.
 - Ten objective questions and ten corresponding keys have been seeded. The answer keys must remain confidential and must never be placed in frontend code or published in GitHub.
