@@ -12,8 +12,15 @@ A static frontend for the two-round AI and cybersecurity workshop. Supabase prov
 ## Sign-in and registration
 1. At the portal, choose **Create account**, enter display name, email, and password, then submit.
 2. If email confirmation is enabled in Supabase, confirm the email before signing in.
-3. A trusted organizer/admin assigns the participant to one of the ten teams from **Workshop results console**. Participants cannot self-assign.
-4. Once assigned, the participant can answer published questions and submit demos for active rounds.
+3. Enter the team join code shared by the organizer during registration. The backend validates the code and assigns the team; participants cannot set `team_id` directly.
+4. If email confirmation is enabled, the code is remembered in that browser and applied after sign-in. If automatic joining fails, sign in and use **Join your team** on the dashboard to retry.
+5. Once assigned, the participant can answer published questions and submit demos for active rounds.
+
+## Team join codes (organizer)
+- In the admin console, use **Team join codes → Generate / rotate code** for each team.
+- Each code is shown once and copied to the clipboard where the browser permits it. Share each code privately with only the intended team.
+- Generating a replacement invalidates the previous code for that team. The database stores only a SHA-256 hash; the original code cannot be retrieved from the table.
+- Do not post team codes publicly. The current codes can be rotated from the admin console before the event.
 
 ## Admin access
 The existing profile in this project is currently marked `admin`. Sign in with that account's email/password using the portal. Do not share credentials in the repository or chat. The admin-only console is shown based on the database profile role, not on a user-editable signup field.
