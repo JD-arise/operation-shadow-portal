@@ -4,7 +4,9 @@ A static frontend for the two-round AI and cybersecurity workshop. Supabase prov
 
 ## Current backend
 - Supabase project: `operation-shadow` (`cqoaukpkvxgyqfjsbxgi`, Mumbai)
-- Ten seeded teams and two inactive rounds
+- Ten seeded teams and two inactive rounds (rounds stay closed until an admin activates one)
+- Two prepared simulated incident scenarios with five multiple-choice questions each; questions and keys are in Supabase, and keys are not shipped to the frontend
+- Admin-only round activation validates that every question has a key, publishes only the selected round, and closes the previous round
 - New signups automatically get a `public.profiles` record with participant role and no team assignment
 - Admin console: registered accounts, team assignment, all quiz answers and automatic scores, demo submissions, judge scores/feedback, team filter, and CSV export
 - The app uses the public publishable key only. Never put a Supabase secret/service-role key in browser code or GitHub.
@@ -27,12 +29,18 @@ The existing profile in this project is currently marked `admin`. Sign in with t
 
 If you need to promote another trusted organizer, first create their Auth account in Supabase Dashboard → Authentication → Users, then set that exact user's profile role to `admin` from the SQL Editor. Never expose privileged keys in frontend code.
 
-## Before using with participants — important security checklist
-1. **Critical: `private.question_keys` currently has Row Level Security disabled.** The proposed statement is `ALTER TABLE private.question_keys ENABLE ROW LEVEL SECURITY;` but it has deliberately not been applied. Review and approve the policy plan first; do not add participant SELECT policies to the answer-key table. Test the SECURITY DEFINER scoring function after enabling RLS, and do not force RLS without testing.
-2. Review grants and input validation on `public.submit_answer` and `public.get_leaderboard`; they are SECURITY DEFINER functions. Ensure the leaderboard exposure is intended for all signed-in participants.
-3. Review access policy for `public.questions`: published questions are visible to authenticated users, including users without an assigned team. Decide how enrollment should be restricted before publishing challenges.
-4. Add questions and matching keys, test scoring with dummy accounts, then activate rounds. The database currently has no questions, answers, demos, or judge evaluations.
-5. Confirm judge/admin access policies and test with separate participant, judge, and admin accounts before event day.
+## Security review status
+- `private.question_keys`: Row Level Security is enabled, and direct table privileges are revoked from `public`, `anon`, and `authenticated`. There are no client-facing policies for this table. The scoring function accesses keys server-side.
+- Ten objective questions and ten corresponding keys have been seeded. The answer keys must remain confidential and must never be placed in frontend code or published in GitHub.
+- The `public.admin_set_active_round(uuid)` SECURITY DEFINER RPC is admin-gated. It verifies that the selected round has questions and every question has an answer key, publishes only that round's questions, closes any previous active round, and activates the selected round.
+- Review grants and input validation on `public.submit_answer` and `public.get_leaderboard`, which are SECURITY DEFINER functions. Confirm that showing every team's score to all authenticated participants is intended.
+- Run full end-to-end checks with separate participant and admin accounts; judge-role access and judging workflows still need testing before event day.
+
+## Round operations
+1. Sign in with the existing admin account.
+2. In **Workshop results console → Round controls**, select a round and activate it when ready. This publishes the selected round's questions and closes any previously active round.
+3. Participants can submit answers only for the active round. Demo submissions are limited to the active round by the backend policy.
+4. To switch rounds, activate the next round from the admin console. Do not activate a round during preparation/testing unless you intend participants to see it.
 
 ## Local preview
 Serve this folder with any static HTTP server (ES modules require HTTP, not `file://`). Example:
